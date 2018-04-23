@@ -21,7 +21,10 @@ module.exports.save = async (req, res, next) => {
   // Validate request body
   req.check('name', 'sport_name_empty').notEmpty()
   req.check('description', 'sport_description_empty').notEmpty()
-  req.check('isIndividual', 'is_individual_invalid').isBoolean()
+
+  if (req.body.isIndividual) {
+    req.check('isIndividual', 'is_individual_invalid').isBoolean()
+  }
 
   const errors = req.validationErrors()
 

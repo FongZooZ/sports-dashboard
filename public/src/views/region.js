@@ -80,7 +80,7 @@ export default class Region extends Component {
         <div className="col-xs-12">
           <div className="box">
             <div className="box-header">
-              <h3 className="box-title">Responsive Hover Table</h3>
+              <h3 className="box-title">Regions List</h3>
             </div>
 
             <div className="box-body table-responsive no-padding">
