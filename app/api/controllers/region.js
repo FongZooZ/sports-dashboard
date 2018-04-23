@@ -26,9 +26,10 @@ module.exports.save = async (req, res, next) => {
 
   if (errors) return res.status(400).json({ errors })
 
+  console.log(req.body)
   let keywords
   if (req.body.keywords) {
-    keywords = keywords.map(keyword => keyword.trim())
+    keywords = req.body.keywords.map(keyword => keyword.trim())
   }
 
   const { name, description, logo } = req.body

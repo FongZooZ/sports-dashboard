@@ -31,7 +31,7 @@ module.exports.save = async (req, res, next) => {
 
   let keywords
   if (req.body.keywords) {
-    keywords = keywords.map(keyword => keyword.trim())
+    keywords = req.body.keywords.map(keyword => keyword.trim())
   }
 
   const { name, description, region, sport, startAt } = req.body
