@@ -5,12 +5,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
   entry: ['./public/src/index.js'],
   output: {
-    filename: 'addon.js',
+    filename: 'dashboard.js',
     path: path.resolve(__dirname, 'public/build')
   },
   plugins: [
     new CleanWebpackPlugin(['public/build']),
-    new ExtractTextPlugin('addon.css')
+    new ExtractTextPlugin('dashboard.css')
   ],
   module: {
     rules: [{

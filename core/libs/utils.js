@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const config = require('../config')
+const cwd = process.cwd()
 
 /**
  * Load any route in `cwd` and apply those to the app. No exception!
@@ -44,7 +44,21 @@ const walk = (modulesPath, excludeDir, callback) => {
   })
 }
 
+const assets = [
+  {staticPath: '/vendors/bootstrap/dist', modulePath: '/node_modules/bootstrap/dist/'},
+  {staticPath: '/vendors/font-awesome', modulePath: '/node_modules/font-awesome/'},
+  // {staticPath: '/vendors/admin-lte/dist', modulePath: '/node_modules/admin-lte/dist/'},
+  {staticPath: '/vendors/jquery/dist', modulePath: '/node_modules/jquery/dist/'}
+]
+
+const registerStaticPath = (app, express) => {
+  assets.forEach(asset => {
+    app.use(asset.staticPath, express.static(`${cwd}${asset.modulePath}`))
+  })
+}
+
 module.exports = {
   loadRoutes,
-  walk
+  walk,
+  registerStaticPath
 }

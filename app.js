@@ -17,6 +17,7 @@ const morgan = require('morgan')
 
 const config = require('./core/config')
 const db = require('./core/db')
+const { registerStaticPath } = require('./core/libs/utils')
 
 const app = express()
 const port = 3000
@@ -43,10 +44,13 @@ app.use(expressValidator({ errorFormatter: (param, msg, value) => {
 const staticDir = path.join(__dirname, 'public')
 app.use(express.static(staticDir))
 
+registerStaticPath(app, express)
+
 //enable res.marko(template, data)
 app.use(markoExpress())
 
 require('./app/api/routes')(app)
+require('./app/dashboard/routes')(app)
 
 // Show nicer errors when in dev mode
 if (process.env.NODE_ENV != 'production') app.use(errorHandler())
