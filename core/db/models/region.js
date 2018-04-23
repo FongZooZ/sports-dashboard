@@ -16,7 +16,7 @@ const RegionSchema = new Schema({
   logo: String,
   keywords: [String],
   description: String,
-  status: { type: String, enum: _.values(statics.status) }
+  status: { type: String, enum: _.values(statics.status), default: statics.status.active }
 })
 
 RegionSchema.statics = statics

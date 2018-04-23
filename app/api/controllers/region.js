@@ -28,16 +28,12 @@ module.exports.save = async (req, res, next) => {
 
   let keywords
   if (req.body.keywords) {
-    keywords = req.body.keywords.split(',')
-    keywords = keywords.map(keyword => {
-      keyword.trim()
-      return keyword
-    })
+    keywords = keywords.map(keyword => keyword.trim())
   }
 
   const { name, description, logo } = req.body
 
-  const region = new Region({ name, logo, keywords, description })
+  const region = new Region({ name, description, logo, keywords })
 
   try {
     await region.save()

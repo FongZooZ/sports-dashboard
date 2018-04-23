@@ -16,7 +16,7 @@ const SportSchema = new Schema({
   logo: String,
   description: String,
   isIndividual: Boolean,
-  status: { type: String, enum: _.values(statics.status) }
+  status: { type: String, enum: _.values(statics.status), default: statics.status.active }
 })
 
 SportSchema.statics = statics

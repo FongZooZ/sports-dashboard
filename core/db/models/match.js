@@ -1,8 +1,15 @@
 const mongoose = require('mongoose')
+const _ = require('lodash')
 
 const { lastModified } = require('../plugins')
 
 const Schema = mongoose.Schema
+const statics = {
+  status: {
+    active: 'active',
+    removed: 'removed'
+  }
+}
 
 const MatchSchema = new Schema({
   name: String,
@@ -11,8 +18,11 @@ const MatchSchema = new Schema({
   streamUrl: String,
   region: { type: Schema.ObjectId, ref: 'Region' },
   sport: { type: Schema.ObjectId, ref: 'Sport' },
-  startAt: Date
+  startAt: Date,
+  status: { type: String, enum: _.values(statics.status), default: statics.status.active }
 })
+
+MatchSchema.statics = statics
 
 MatchSchema.plugin(lastModified)
 
