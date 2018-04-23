@@ -10,6 +10,17 @@ module.exports.query = async (req, res, next) => {
       status: Match.status.active
     }
     matchs = await Match.find(cond)
+      .populate({
+        path: 'region',
+        select: {
+          name: 1
+        }
+      }).populate({
+        path: 'sport',
+        select: {
+          name: 1
+        }
+      })
   } catch (err) {
     return next(err)
   }
@@ -79,7 +90,17 @@ module.exports.fetch = async (req, res, next) => {
       _id: req.params.matchId,
       status: Match.status.active
     }
-    match = await Match.findOne(cond)
+    match = await Match.findOne(cond).populate({
+      path: 'region',
+      select: {
+        name: 1
+      }
+    }).populate({
+      path: 'sport',
+      select: {
+        name: 1
+      }
+    })
   } catch (err) {
     return next(err)
   }
