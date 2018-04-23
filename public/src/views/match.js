@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import filter from 'lodash/filter'
 
 export default class match extends Component {
   constructor(props) {
@@ -62,6 +63,19 @@ export default class match extends Component {
     }
   }
 
+  async _handleDelete(e, matchId) {
+    try {
+      await axios.delete(`/api/matches/${matchId}`)
+      await this.setState({
+        matches: filter(this.state.matches, o => {
+          return o._id != matchId
+        })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   render() {
     let matches = []
     if (this.state.matches.length) {
@@ -81,7 +95,10 @@ export default class match extends Component {
             <td>{match.region.name}</td>
             <td>{match.sport.name}</td>
             <td>{match.startAt}</td>
-            <td><button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, match)}><i className="fa fa-save"></i> Save</button></td>
+            <td>
+              <button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, match)}><i className="fa fa-save"></i> Save</button>
+              <button type="button" className="btn btn-block btn-danger" onClick={(e) => this._handleDelete(e, match._id)}><i className="fa fa-save"></i> Delete</button>
+            </td>
           </tr>
         )
       })
@@ -126,6 +143,7 @@ export default class match extends Component {
                     <th>Region</th>
                     <th>Sport</th>
                     <th>Start At</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>

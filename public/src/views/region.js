@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import filter from 'lodash/filter'
 
 export default class Region extends Component {
   constructor(props) {
@@ -28,7 +29,6 @@ export default class Region extends Component {
   }
 
   async _handleUpdate(e, region) {
-    e.prevenDefault()
   }
 
   async _handleSave(e) {
@@ -53,6 +53,19 @@ export default class Region extends Component {
     }
   }
 
+  async _handleDelete(e, regionId) {
+    try {
+      await axios.delete(`/api/regions/${regionId}`)
+      await this.setState({
+        regions: filter(this.state.regions, o => {
+          return o._id != regionId
+        })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   render() {
     let items = []
     if (this.state.regions.length) {
@@ -69,7 +82,10 @@ export default class Region extends Component {
             <td>{region.logo}</td>
             <td>{keywords}</td>
             <td>{region.description}</td>
-            <td><button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, region)}><i className="fa fa-save"></i> Save</button></td>
+            <td>
+              <button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, region)}><i className="fa fa-save"></i> Edit</button>
+              <button type="button" className="btn btn-block btn-danger" onClick={(e) => this._handleDelete(e, region._id)}><i className="fa fa-save"></i> Delete</button>
+            </td>
           </tr>
         )
       })
@@ -92,6 +108,7 @@ export default class Region extends Component {
                     <th>Logo</th>
                     <th>Keywords</th>
                     <th>Description</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import filter from 'lodash/filter'
 
 export default class Sport extends Component {
   constructor(props) {
@@ -36,7 +37,6 @@ export default class Sport extends Component {
   }
 
   async _handleUpdate(e, sport) {
-    e.prevenDefault()
   }
 
   async _handleSave(e) {
@@ -54,6 +54,19 @@ export default class Sport extends Component {
     }
   }
 
+  async _handleDelete(e, sportId) {
+    try {
+      await axios.delete(`/api/sports/${sportId}`)
+      await this.setState({
+        sports: filter(this.state.sports, o => {
+          return o._id != sportId
+        })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   render() {
     let items = []
     if (this.state.sports.length) {
@@ -65,7 +78,10 @@ export default class Sport extends Component {
             <td>{sport.logo}</td>
             <td>{sport.description}</td>
             <td>{sport.isIndividual ? 'Yes' : 'No'}</td>
-            <td><button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, sport)}><i className="fa fa-save"></i> Save</button></td>
+            <td>
+              <button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, sport)}><i className="fa fa-save"></i> Save</button>
+              <button type="button" className="btn btn-block btn-danger" onClick={(e) => this._handleDelete(e, sport._id)}><i className="fa fa-save"></i> Delete</button>
+            </td>
           </tr>
         )
       })
@@ -88,6 +104,7 @@ export default class Sport extends Component {
                     <th>Logo</th>
                     <th>Description</th>
                     <th>Is Individual</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
