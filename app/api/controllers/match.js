@@ -34,7 +34,8 @@ module.exports.save = async (req, res, next) => {
   req.check('description', 'match_description_empty').notEmpty()
   req.check('region', 'region_empty').notEmpty()
   req.check('sport', 'sport_empty').notEmpty()
-  req.check('startAt', 'start_time_empty').notEmpty()
+  // Temporary disable
+  // req.check('startAt', 'start_time_empty').notEmpty()
 
   const errors = req.validationErrors()
 
@@ -47,10 +48,21 @@ module.exports.save = async (req, res, next) => {
 
   const { name, description, region, sport, startAt } = req.body
 
-  const match = new Match({ name, description, region, sport, startAt, keywords })
+  let match = new Match({ name, description, region, sport, startAt, keywords })
 
   try {
     await match.save()
+    match = await Match.findOne({_id: match._id}).populate({
+      path: 'region',
+      select: {
+        name: 1
+      }
+    }).populate({
+      path: 'sport',
+      select: {
+        name: 1
+      }
+    })
   } catch (err) {
     return next(err)
   }

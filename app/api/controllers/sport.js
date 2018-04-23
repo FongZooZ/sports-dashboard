@@ -103,7 +103,7 @@ module.exports.delete = async (req, res, next) => {
   try {
     await sport.save()
   } catch (err) {
-    return next(err);
+    return next(err)
   }
 
   res.json(sport)
