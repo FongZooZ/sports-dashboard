@@ -1,0 +1,11 @@
+Site quản lý thể thao theo:
+- Khu vực: Châu âu, châu á,...
+- Theo tên môn thể thao: bóng đá, ném tạ...
+- Trận đấu.
+
+
+* Quản lý là bao gồm: thêm, xóa, sửa
+
+- 1 Khuc vực thì có thông tin: Tên, logo, keyword, description
+- Môn thể thao: Tên, logo, description, Đối kháng: yes/no ( Đối kháng là 2 đội đấu với nhau ).
+- Trận đấu: Tên, keyword, description, url_stream, khu vực, Môn thể thao, thời gian ( ngày, giờ, UTC)

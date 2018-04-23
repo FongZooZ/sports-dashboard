@@ -1,0 +1,45 @@
+{
+  "name": "sports-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sports Dashboard",
+  "main": "app.js",
+  "scripts": {
+    "dev": "yarn run webpack-dev && NODE_ENV=development nodemon --inspect=0.0.0.0:9229 app.js",
+    "prod": "node app.js",
+    "webpack-dev": "node_modules/webpack/bin/webpack.js --mode development --config webpack.dev.js",
+    "webpack-prod": "node_modules/webpack/bin/webpack.js --mode production --config webpack.prod.js"
+  },
+  "keywords": [],
+  "author": "FongZooZ",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "compression": "^1.7.2",
+    "cookie-parser": "^1.4.3",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.3",
+    "express-validator": "^5.0.3",
+    "helmet": "^3.12.0",
+    "marko": "^4.9.6",
+    "mongoose": "^5.0.14",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.42",
+    "@babel/preset-env": "^7.0.0-beta.42",
+    "@babel/preset-react": "^7.0.0-beta.42",
+    "babel-loader": "8.0.0-beta.0",
+    "clean-webpack-plugin": "^0.1.19",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.0",
+    "eslint-plugin-react": "^7.7.0",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "style-loader": "^0.20.3",
+    "uglifyjs-webpack-plugin": "^1.2.4",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.12",
+    "webpack-merge": "^4.1.2"
+  }
+}

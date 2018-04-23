@@ -1,0 +1,8 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    "public/*",
+    "*.marko.js"
+  ],
+  "verbose": true
+}

@@ -1,0 +1,19 @@
+version: "3"
+services:
+  db:
+    image: mongo:3.6.1
+    ports:
+      - "27017:27017"
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fongzooz/sports-dashboard
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "80:3000"
+      - "9229:9229"
+    depends_on:
+      - db
+    command: ["yarn", "run", "dev"]
