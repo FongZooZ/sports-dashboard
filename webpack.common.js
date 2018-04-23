@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: ['./public/src/index.js'],
+  entry: ['babel-polyfill', './public/src/index.js'],
   output: {
     filename: 'dashboard.js',
     path: path.resolve(__dirname, 'public/build')
