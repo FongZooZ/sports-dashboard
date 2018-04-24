@@ -1,12 +1,12 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { HashRouter, Route, Link } from 'react-router-dom'
 
 import Region from './region'
 import Sport from './sport'
 import Match from './match'
 
 const Dashboard = () => (
-  <Router>
+  <HashRouter>
     <div>
       <aside className="main-sidebar">
         <section className="sidebar">
@@ -50,7 +50,7 @@ const Dashboard = () => (
         </div>
       </div>
     </div>
-  </Router>
+  </HashRouter>
 )
 
 export default Dashboard
