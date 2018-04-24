@@ -79,8 +79,8 @@ export default class Sport extends Component {
             <td>{sport.description}</td>
             <td>{sport.isIndividual ? 'Yes' : 'No'}</td>
             <td>
-              <button type="button" className="btn btn-block btn-primary" onClick={(e) => this._handleUpdate(e, sport)}><i className="fa fa-save"></i> Save</button>
-              <button type="button" className="btn btn-block btn-danger" onClick={(e) => this._handleDelete(e, sport._id)}><i className="fa fa-save"></i> Delete</button>
+              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleUpdate(e, sport)}><i className="fa fa-edit"></i> Edit</button>
+              <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, sport._id)}><i className="fa fa-trash"></i> Delete</button>
             </td>
           </tr>
         )
@@ -89,14 +89,14 @@ export default class Sport extends Component {
 
     return (
       <div className="row">
-        <div className="col-xs-12">
+        <div className="col-md-12">
           <div className="box">
             <div className="box-header">
               <h3 className="box-title">Sports List</h3>
             </div>
 
-            <div className="box-body table-responsive no-padding">
-              <table className="table table-hover no-margin">
+            <div className="box-body table-responsive">
+              <table className="table table-hover">
                 <thead>
                   <tr>
                     <th>#</th>
