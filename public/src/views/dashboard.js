@@ -12,7 +12,7 @@ const Dashboard = () => (
         <section className="sidebar">
           <ul className="sidebar-menu" data-widget="tree">
             <li className="header">Admin</li>
-            <li className="active">
+            <li>
               <Link to="/regions">
                 <i className="fa fa-link"></i>
                 <span>Regions</span>
