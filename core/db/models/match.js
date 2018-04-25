@@ -26,4 +26,11 @@ MatchSchema.statics = statics
 
 MatchSchema.plugin(lastModified)
 
+MatchSchema.index({ name: 1 })
+MatchSchema.index({ createdAt: -1 })
+MatchSchema.index({ status: 'text' })
+MatchSchema.index({ startAt: -1 })
+MatchSchema.index({ region: 1 })
+MatchSchema.index({ sport: 1 })
+
 module.exports = mongoose.model('Match', MatchSchema, 'Match')

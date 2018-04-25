@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import _ from 'lodash'
 
 export default class match extends Component {
   constructor(props) {

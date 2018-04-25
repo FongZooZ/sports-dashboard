@@ -23,4 +23,8 @@ RegionSchema.statics = statics
 
 RegionSchema.plugin(lastModified)
 
+RegionSchema.index({ name: 1 })
+RegionSchema.index({ createdAt: -1 })
+RegionSchema.index({ status: 'text' })
+
 module.exports = mongoose.model('Region', RegionSchema, 'Region')

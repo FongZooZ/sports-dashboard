@@ -23,4 +23,8 @@ SportSchema.statics = statics
 
 SportSchema.plugin(lastModified)
 
+SportSchema.index({ name: 1 })
+SportSchema.index({ createdAt: -1 })
+SportSchema.index({ status: 'text' })
+
 module.exports = mongoose.model('Sport', SportSchema, 'Sport')
