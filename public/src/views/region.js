@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import _ from 'lodash'
 
 export default class Region extends Component {
   constructor(props) {
@@ -98,11 +97,7 @@ export default class Region extends Component {
   async _handleDelete(e, regionId) {
     try {
       await axios.delete(`/api/regions/${regionId}`)
-      await this.setState({
-        regions: _.filter(this.state.regions, o => {
-          return o._id != regionId
-        })
-      })
+      this._reload()
     } catch (err) {
       console.error(err)
     }

@@ -80,11 +80,7 @@ export default class Sport extends Component {
   async _handleDelete(e, sportId) {
     try {
       await axios.delete(`/api/sports/${sportId}`)
-      await this.setState({
-        sports: _.filter(this.state.sports, o => {
-          return o._id != sportId
-        })
-      })
+      this._reload()
     } catch (err) {
       console.error(err)
     }

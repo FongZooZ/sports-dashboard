@@ -115,11 +115,7 @@ export default class match extends Component {
   async _handleDelete(e, matchId) {
     try {
       await axios.delete(`/api/matches/${matchId}`)
-      await this.setState({
-        matches: _.filter(this.state.matches, o => {
-          return o._id != matchId
-        })
-      })
+      this._reload()
     } catch (err) {
       console.error(err)
     }
