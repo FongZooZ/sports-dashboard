@@ -142,24 +142,33 @@ export default class Region extends Component {
             </div>
 
             <div className="box-body table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Logo</th>
-                    <th>Keywords</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items}
-                </tbody>
-              </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
-                Create new Region
-              </button>
+              <div className="dataTables_wrapper form-inline dt-bootstrap">
+                <div className="col-md-12">
+                  <table className="table table-hover" id="regions-list">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Logo</th>
+                        <th>Keywords</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {items}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="col-md-5">
+                  <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
+                    Create new Region
+                  </button>
+                </div>
+                <div className="col-md-7">
+                  {/* <Pagination reload={() => this._reload} paginator={this.state.paginator} tableId="regions-list" /> */}
+                </div>
+              </div>
 
               <div className="modal fade" id="create-region-modal" style={{display: 'none'}}>
                 <div className="modal-dialog">

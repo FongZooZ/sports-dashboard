@@ -16,7 +16,7 @@ export default class Sport extends Component {
     this._reload()
   }
 
-  async _reload() {
+  async _reload(page, limit) {
     try {
       let sports = await axios.get('/api/sports')
       this.setState({sports: sports.data.data})
@@ -119,24 +119,33 @@ export default class Sport extends Component {
             </div>
 
             <div className="box-body table-responsive">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Logo</th>
-                    <th>Description</th>
-                    <th>Is Individual</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items}
-                </tbody>
-              </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
-                Create new Sport
-              </button>
+              <div className="dataTables_wrapper form-inline dt-bootstrap">
+                <div className="col-md-12">
+                  <table className="table table-hover" id="sports-list">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Logo</th>
+                        <th>Description</th>
+                        <th>Is Individual</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {items}
+                    </tbody>
+                  </table>
+                  <div className="col-md-5">
+                    <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
+                      Create new Sport
+                    </button>
+                  </div>
+                  <div className="col-md-7">
+                    {/* <Pagination reload={() => this._reload} paginator={this.state.paginator} tableId="sports-list" /> */}
+                  </div>
+                </div>
+              </div>
 
               <div className="modal fade" id="create-sport-modal" style={{display: 'none'}}>
                 <div className="modal-dialog">

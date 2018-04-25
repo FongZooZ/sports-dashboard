@@ -17,7 +17,7 @@ export default class match extends Component {
   async componentDidMount() {
     this._reload()
     try {
-      let promises = [axios.get('/api/regions'), axios.get('/api/sports')]
+      let promises = [axios.get('/api/regions?all=true'), axios.get('/api/sports?all=true')]
       let [regions, sports] = await Promise.all(promises)
 
       this.setState({
