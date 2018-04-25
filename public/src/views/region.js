@@ -12,10 +12,14 @@ export default class Region extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this._reload()
+  }
+
+  async _reload() {
     try {
       let regions = await axios.get('/api/regions')
-      this.setState({regions: regions.data})
+      this.setState({regions: regions.data.data})
     } catch (err) {
       console.error(err)
     }
@@ -55,11 +59,10 @@ export default class Region extends Component {
 
     try {
       await axios.put(`/api/regions/${this.state.temp._id}`, region)
-      const regions = await axios.get('/api/regions')
       await this.setState({
-        regions: regions.data,
         temp: {}
       })
+      this._reload()
       $('#create-region-modal').modal('toggle')
     } catch (err) {
       console.error(err)
@@ -82,11 +85,10 @@ export default class Region extends Component {
 
     try {
       await axios.post('/api/regions', newRegion)
-      const regions = await axios.get('/api/regions')
       await this.setState({
-        regions: regions.data,
         temp: {}
       })
+      this._reload()
       $('#create-region-modal').modal('toggle')
     } catch (err) {
       console.error(err)

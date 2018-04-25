@@ -1,20 +1,37 @@
 const mongoose = require('mongoose')
+const pagination = require('pagination')
 
 const Sport = mongoose.model('Sport')
 
-// TODO: filter with conditions on querystring
 module.exports.query = async (req, res, next) => {
-  let sports
+  const sort = req.query.sort || '-createdAt'
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 50
+  const skip = (page - 1) * limit || 0
+
+  let sports, total
   try {
-    const cond = {
-      status: Sport.status.active
-    }
-    sports = await Sport.find(cond)
+    const cond = {status: Sport.status.active}
+    sports = await Sport.find(cond).sort(sort).skip(skip).limit(limit)
+    total = await Sport.count(cond)
   } catch (err) {
     return next(err)
   }
 
-  res.json(sports)
+  const paginator = new pagination.SearchPaginator({
+    prelink: req.url,
+    current: page,
+    rowsPerPage: limit,
+    totalResult: total,
+  })
+
+  const results = {
+    data: sports,
+    paginator: paginator.getPaginationData(),
+    page, limit, skip, sort
+  }
+
+  res.json(results)
 }
 
 module.exports.save = async (req, res, next) => {

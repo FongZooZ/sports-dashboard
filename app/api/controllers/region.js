@@ -1,20 +1,37 @@
 const mongoose = require('mongoose')
+const pagination = require('pagination')
 
 const Region = mongoose.model('Region')
 
-// TODO: filter with conditions on querystring
 module.exports.query = async (req, res, next) => {
-  let regions
+  const sort = req.query.sort || '-createdAt'
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 50
+  const skip = (page - 1) * limit || 0
+
+  let regions, total
   try {
-    const cond = {
-      status: Region.status.active
-    }
-    regions = await Region.find(cond)
+    const cond = {status: Region.status.active}
+    regions = await Region.find(cond).sort(sort).skip(skip).limit(limit)
+    total = await Region.count(cond)
   } catch (err) {
     return next(err)
   }
 
-  res.json(regions)
+  const paginator = new pagination.SearchPaginator({
+    prelink: req.url,
+    current: page,
+    rowsPerPage: limit,
+    totalResult: total,
+  })
+
+  const results = {
+    data: regions,
+    paginator: paginator.getPaginationData(),
+    page, limit, skip, sort
+  }
+
+  res.json(results)
 }
 
 module.exports.save = async (req, res, next) => {

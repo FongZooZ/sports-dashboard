@@ -15,16 +15,25 @@ export default class match extends Component {
   }
 
   async componentDidMount() {
+    this._reload()
     try {
-      let promises = [axios.get('/api/matches'), axios.get('/api/regions'), axios.get('/api/sports')]
-      let [matches, regions, sports] = await Promise.all(promises)
+      let promises = [axios.get('/api/regions'), axios.get('/api/sports')]
+      let [regions, sports] = await Promise.all(promises)
 
       this.setState({
-        matches: matches.data,
         regions: regions.data,
         sports: sports.data,
         temp: {}
       })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async _reload() {
+    try {
+      let matches = await axios.get('/api/matches')
+      this.setState({matches: matches.data.data})
     } catch (err) {
       console.error(err)
     }
@@ -67,11 +76,10 @@ export default class match extends Component {
 
     try {
       await axios.put(`/api/matches/${this.state.temp._id}`, match)
-      const matches = await axios.get('/api/matches')
       await this.setState({
-        matches: matches.data,
         temp: {}
       })
+      this._reload()
       $('#create-match-modal').modal('toggle')
     } catch (err) {
       console.error(err)
@@ -94,11 +102,10 @@ export default class match extends Component {
 
     try {
       await axios.post('/api/matches', newMatch)
-      const matches = await axios.get('/api/matches')
       await this.setState({
-        matches: matches.data,
         temp: {}
       })
+      this._reload()
       $('#create-match-modal').modal('toggle')
     } catch (err) {
       console.error(err)

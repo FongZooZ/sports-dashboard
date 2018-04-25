@@ -1,15 +1,18 @@
 const mongoose = require('mongoose')
+const pagination = require('pagination')
 
 const Match = mongoose.model('Match')
 
-// TODO: filter with conditions on querystring
 module.exports.query = async (req, res, next) => {
-  let matchs
+  const sort = req.query.sort || '-createdAt'
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 50
+  const skip = (page - 1) * limit || 0
+
+  let matches, total
   try {
-    const cond = {
-      status: Match.status.active
-    }
-    matchs = await Match.find(cond)
+    const cond = {status: Match.status.active}
+    matches = await Match.find(cond)
       .populate({
         path: 'region',
         select: {
@@ -20,12 +23,26 @@ module.exports.query = async (req, res, next) => {
         select: {
           name: 1
         }
-      })
+      }).sort(sort).skip(skip).limit(limit)
+    total = await Match.count(cond)
   } catch (err) {
     return next(err)
   }
 
-  res.json(matchs)
+  const paginator = new pagination.SearchPaginator({
+    prelink: req.url,
+    current: page,
+    rowsPerPage: limit,
+    totalResult: total,
+  })
+
+  const results = {
+    data: matches,
+    paginator: paginator.getPaginationData(),
+    page, limit, skip, sort
+  }
+
+  res.json(results)
 }
 
 module.exports.save = async (req, res, next) => {

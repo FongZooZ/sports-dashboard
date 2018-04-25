@@ -5244,6 +5244,10 @@ pace@0.0.4:
   dependencies:
     charm "~0.1.0"
 
+pagination@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/pagination/-/pagination-0.4.4.tgz#f83ee2b51a5723c390bc78f44d8a20fe27557a9c"
+
 pako@~1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.6.tgz#0101211baa70c4bca4a0f63f2206e97b7dfaf258"

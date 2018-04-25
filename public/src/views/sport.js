@@ -12,10 +12,14 @@ export default class Sport extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this._reload()
+  }
+
+  async _reload() {
     try {
       let sports = await axios.get('/api/sports')
-      this.setState({sports: sports.data})
+      this.setState({sports: sports.data.data})
     } catch (err) {
       console.error(err)
     }
@@ -50,11 +54,10 @@ export default class Sport extends Component {
   async _handleUpdate(e) {
     try {
       await axios.put(`/api/sports/${this.state.temp._id}`, this.state.temp)
-      const sports = await axios.get('/api/sports')
       await this.setState({
-        sports: sports.data,
         temp: {}
       })
+      this._reload()
       $('#create-sport-modal').modal('toggle')
     } catch (err) {
       console.error(err)
@@ -64,11 +67,10 @@ export default class Sport extends Component {
   async _handleSave(e) {
     try {
       await axios.post('/api/sports', this.state.temp)
-      const sports = await axios.get('/api/sports')
       await this.setState({
-        sports: sports.data,
         temp: {}
       })
+      this._reload()
       $('#create-sport-modal').modal('toggle')
     } catch (err) {
       console.error(err)
