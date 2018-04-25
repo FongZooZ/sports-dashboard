@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import filter from 'lodash/filter'
+import _ from 'lodash'
 
 export default class Sport extends Component {
   constructor(props) {
     super(props)
     this.state = {
       sports: [],
-      temp: {}
+      temp: {},
+      isEdit: false
     }
   }
 
@@ -20,7 +21,7 @@ export default class Sport extends Component {
     }
   }
 
-  _handleBlur(e, field) {
+  _handleChange(e, field) {
     this.setState({
       temp: Object.assign(this.state.temp, {
         [field]: e.target.value
@@ -36,19 +37,39 @@ export default class Sport extends Component {
     })
   }
 
-  async _handleUpdate(e, sport) {
+  async _handleOpenEditModal(e, sport) {
+    await this.setState({ isEdit: true, temp: {...sport} })
+    $('#create-sport-modal').modal('toggle')
   }
 
-  async _handleSave(e) {
-    let newSport
+  async _handleOpenCreateModal(e) {
+    await this.setState({ isEdit: false, temp: {} })
+    $('#create-sport-modal').modal('toggle')
+  }
+
+  async _handleUpdate(e) {
     try {
-      newSport = await axios.post('/api/sports', this.state.temp)
+      await axios.put(`/api/sports/${this.state.temp._id}`, this.state.temp)
+      const sports = await axios.get('/api/sports')
       await this.setState({
-        sports: [...this.state.sports, newSport.data],
+        sports: sports.data,
         temp: {}
       })
       $('#create-sport-modal').modal('toggle')
-      $('#sport-form')[0].reset()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async _handleSave(e) {
+    try {
+      await axios.post('/api/sports', this.state.temp)
+      const sports = await axios.get('/api/sports')
+      await this.setState({
+        sports: sports.data,
+        temp: {}
+      })
+      $('#create-sport-modal').modal('toggle')
     } catch (err) {
       console.error(err)
     }
@@ -58,7 +79,7 @@ export default class Sport extends Component {
     try {
       await axios.delete(`/api/sports/${sportId}`)
       await this.setState({
-        sports: filter(this.state.sports, o => {
+        sports: _.filter(this.state.sports, o => {
           return o._id != sportId
         })
       })
@@ -79,7 +100,7 @@ export default class Sport extends Component {
             <td>{sport.description}</td>
             <td>{sport.isIndividual ? 'Yes' : 'No'}</td>
             <td>
-              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleUpdate(e, sport)}><i className="fa fa-edit"></i> Edit</button>
+              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, sport)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, sport._id)}><i className="fa fa-trash"></i> Delete</button>
             </td>
           </tr>
@@ -111,15 +132,15 @@ export default class Sport extends Component {
                   {items}
                 </tbody>
               </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" data-target="#create-sport-modal">
-                Create new sport
+              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
+                Create new Sport
               </button>
 
               <div className="modal fade" id="create-sport-modal" style={{display: 'none'}}>
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h4 className="modal-title">Create new sport</h4>
+                      <h4 className="modal-title">{this.state.isEdit ? 'Edit Sport' : 'Create new Sport'}</h4>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span></button>
                     </div>
@@ -129,26 +150,26 @@ export default class Sport extends Component {
                           <div className="form-group">
                             <label htmlFor="input-sport-name" className="col-sm-2 control-label">Name</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-sport-name" placeholder="Name" onBlur={(e) => this._handleBlur(e, 'name')} />
+                              <input type="text" className="form-control" id="input-sport-name" placeholder="Name" value={this.state.temp.name || ''} onChange={(e) => this._handleChange(e, 'name')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-sport-logo" className="col-sm-2 control-label">Logo</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-sport-logo" placeholder="Logo" onBlur={(e) => this._handleBlur(e, 'logo')} />
+                              <input type="text" className="form-control" id="input-sport-logo" placeholder="Logo" value={this.state.temp.logo || ''} onChange={(e) => this._handleChange(e, 'logo')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-sport-description" className="col-sm-2 control-label">Description</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-sport-description" placeholder="Description" onBlur={(e) => this._handleBlur(e, 'description')} />
+                              <input type="text" className="form-control" id="input-sport-description" placeholder="Description" value={this.state.temp.description || ''} onChange={(e) => this._handleChange(e, 'description')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <div className="col-sm-offset-2 col-sm-10">
                               <div className="checkbox">
                                 <label>
-                                  <input type="checkbox" onChange={(e) => this._handleCheckboxChange(e)} /> Is Individual
+                                  <input type="checkbox" value={this.state.temp.isIndividual || ''} onChange={(e) => this._handleCheckboxChange(e)} /> Is Individual
                                 </label>
                               </div>
                             </div>
@@ -158,7 +179,11 @@ export default class Sport extends Component {
                     </div>
                     <div className="modal-footer">
                       <button type="button" className="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save sport</button>
+                      {
+                        this.state.isEdit ?
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleUpdate(e)}>Update</button> :
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save</button>
+                      }
                     </div>
                   </div>
                 </div>

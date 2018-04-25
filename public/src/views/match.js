@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import filter from 'lodash/filter'
+import _ from 'lodash'
 
 export default class match extends Component {
   constructor(props) {
@@ -9,7 +9,8 @@ export default class match extends Component {
       matches: [],
       regions: [],
       sports: [],
-      temp: {}
+      temp: {},
+      isEdit: false
     }
   }
 
@@ -29,7 +30,7 @@ export default class match extends Component {
     }
   }
 
-  _handleBlur(e, field) {
+  _handleChange(e, field) {
     this.setState({
       temp: Object.assign(this.state.temp, {
         [field]: e.target.value
@@ -37,27 +38,68 @@ export default class match extends Component {
     })
   }
 
-  async _handleUpdate(e, match) {
-    e.prevenDefault()
+  async _handleOpenEditModal(e, match) {
+    let temp = {...match}
+    temp.region = temp.region._id
+    temp.sport = temp.sport._id
+    await this.setState({ isEdit: true, temp })
+    $('#create-match-modal').modal('toggle')
+  }
+
+  async _handleOpenCreateModal(e) {
+    await this.setState({ isEdit: false, temp: {} })
+    $('#create-match-modal').modal('toggle')
+  }
+
+  async _handleUpdate(e) {
+    let keywords = []
+    if (typeof(this.state.temp.keywords) == 'string') {
+      keywords = this.state.temp.keywords.split(',')
+      keywords = keywords.map(keyword => keyword.trim())
+    } else {
+      keywords = this.state.temp.keywords
+    }
+
+    let match = {
+      ...this.state.temp,
+      keywords
+    }
+
+    try {
+      await axios.put(`/api/matches/${this.state.temp._id}`, match)
+      const matches = await axios.get('/api/matches')
+      await this.setState({
+        matches: matches.data,
+        temp: {}
+      })
+      $('#create-match-modal').modal('toggle')
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   async _handleSave(e) {
     let keywords = []
-    if (this.state.temp.keywords) keywords = this.state.temp.keywords.split(',')
-    keywords = keywords.map(keyword => keyword.trim())
+    if (this.state.temp.keywords) {
+      keywords = this.state.temp.keywords.split(',')
+      keywords = keywords.map(keyword => keyword.trim())
+    } else {
+      keywords = this.state.temp.keywords
+    }
+
     let newMatch = {
       ...this.state.temp,
       keywords
     }
 
     try {
-      newMatch = await axios.post('/api/matches', newMatch)
+      await axios.post('/api/matches', newMatch)
+      const matches = await axios.get('/api/matches')
       await this.setState({
-        matches: [...this.state.matches, newMatch.data],
+        matches: matches.data,
         temp: {}
       })
       $('#create-match-modal').modal('toggle')
-      $('#match-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -67,7 +109,7 @@ export default class match extends Component {
     try {
       await axios.delete(`/api/matches/${matchId}`)
       await this.setState({
-        matches: filter(this.state.matches, o => {
+        matches: _.filter(this.state.matches, o => {
           return o._id != matchId
         })
       })
@@ -96,7 +138,7 @@ export default class match extends Component {
             <td>{match.sport.name}</td>
             <td>{match.startAt}</td>
             <td>
-              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleUpdate(e, match)}><i className="fa fa-edit"></i> Edit</button>
+              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, match._id)}><i className="fa fa-trash"></i> Delete</button>
             </td>
           </tr>
@@ -150,8 +192,8 @@ export default class match extends Component {
                   {matches}
                 </tbody>
               </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" data-target="#create-match-modal">
-                Create new match
+              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
+                Create new Match
               </button>
 
               <div className="modal fade" id="create-match-modal" style={{display: 'none'}}>
@@ -168,37 +210,37 @@ export default class match extends Component {
                           <div className="form-group">
                             <label htmlFor="input-match-name" className="col-sm-2 control-label">Name</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-match-name" placeholder="Name" onBlur={(e) => this._handleBlur(e, 'name')} />
+                              <input type="text" className="form-control" id="input-match-name" placeholder="Name" value={this.state.temp.name || ''} onChange={(e) => this._handleChange(e, 'name')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-keywords" className="col-sm-2 control-label">Keywords</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-match-keywords" placeholder="Keywords" onBlur={(e) => this._handleBlur(e, 'keywords')} />
+                              <input type="text" className="form-control" id="input-match-keywords" placeholder="Keywords" value={this.state.temp.keywords || ''} onChange={(e) => this._handleChange(e, 'keywords')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-description" className="col-sm-2 control-label">Description</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-match-description" placeholder="Description" onBlur={(e) => this._handleBlur(e, 'description')} />
+                              <input type="text" className="form-control" id="input-match-description" placeholder="Description" value={this.state.temp.description || ''} onChange={(e) => this._handleChange(e, 'description')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-stream-url" className="col-sm-2 control-label">Stream URL</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-match-stream-url" placeholder="Stream URL" onBlur={(e) => this._handleBlur(e, 'streamUrl')} />
+                              <input type="text" className="form-control" id="input-match-stream-url" placeholder="Stream URL" value={this.state.temp.streamUrl || ''} onChange={(e) => this._handleChange(e, 'streamUrl')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-region">Region Name</label>
-                            <select id="input-match-region" className="form-control" onBlur={(e) => this._handleBlur(e, 'region')}>
+                            <select id="input-match-region" className="form-control" value={this.state.temp.region || ''} onChange={(e) => this._handleChange(e, 'region')}>
                               <option>-- Select Region --</option>
                               {regionItems}
                             </select>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-sport">Sport Name</label>
-                            <select id="input-match-sport" className="form-control" onBlur={(e) => this._handleBlur(e, 'sport')}>
+                            <select id="input-match-sport" className="form-control" value={this.state.temp.sport || ''} onChange={(e) => this._handleChange(e, 'sport')}>
                               <option>-- Select Sport --</option>
                               {sportItems}
                             </select>
@@ -209,7 +251,7 @@ export default class match extends Component {
                               <div className="input-group-addon">
                                 <i className="fa fa-calendar"></i>
                               </div>
-                              <input type="text" className="form-control pull-right" onBlur={(e) => this._handleBlur(e, 'startAt')} />
+                              <input type="text" className="form-control pull-right" value={this.state.temp.startAt || ''} onChange={(e) => this._handleChange(e, 'startAt')} />
                             </div>
                           </div>
                         </div>
@@ -217,7 +259,11 @@ export default class match extends Component {
                     </div>
                     <div className="modal-footer">
                       <button type="button" className="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save match</button>
+                      {
+                        this.state.isEdit ?
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleUpdate(e)}>Update</button> :
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save</button>
+                      }
                     </div>
                   </div>
                 </div>

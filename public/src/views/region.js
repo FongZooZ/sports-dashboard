@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import filter from 'lodash/filter'
+import _ from 'lodash'
 
 export default class Region extends Component {
   constructor(props) {
     super(props)
     this.state = {
       regions: [],
-      temp: {}
+      temp: {},
+      isEdit: false
     }
   }
 
@@ -20,7 +21,7 @@ export default class Region extends Component {
     }
   }
 
-  _handleBlur(e, field) {
+  _handleChange(e, field) {
     this.setState({
       temp: Object.assign(this.state.temp, {
         [field]: e.target.value
@@ -28,26 +29,65 @@ export default class Region extends Component {
     })
   }
 
-  async _handleUpdate(e, region) {
+  async _handleOpenEditModal(e, region) {
+    await this.setState({ isEdit: true, temp: {...region} })
+    $('#create-region-modal').modal('toggle')
+  }
+
+  async _handleOpenCreateModal(e) {
+    await this.setState({ isEdit: false, temp: {} })
+    $('#create-region-modal').modal('toggle')
+  }
+
+  async _handleUpdate(e) {
+    let keywords = []
+    if (typeof(this.state.temp.keywords) == 'string') {
+      keywords = this.state.temp.keywords.split(',')
+      keywords = keywords.map(keyword => keyword.trim())
+    } else {
+      keywords = this.state.temp.keywords
+    }
+
+    let region = {
+      ...this.state.temp,
+      keywords
+    }
+
+    try {
+      await axios.put(`/api/regions/${this.state.temp._id}`, region)
+      const regions = await axios.get('/api/regions')
+      await this.setState({
+        regions: regions.data,
+        temp: {}
+      })
+      $('#create-region-modal').modal('toggle')
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   async _handleSave(e) {
     let keywords = []
-    if (this.state.temp.keywords) keywords = this.state.temp.keywords.split(',')
-    keywords = keywords.map(keyword => keyword.trim())
+    if (typeof(this.state.temp.keywords) == 'string') {
+      keywords = this.state.temp.keywords.split(',')
+      keywords = keywords.map(keyword => keyword.trim())
+    } else {
+      keywords = this.state.temp.keywords
+    }
+
     let newRegion = {
       ...this.state.temp,
       keywords
     }
 
     try {
-      newRegion = await axios.post('/api/regions', newRegion)
+      await axios.post('/api/regions', newRegion)
+      const regions = await axios.get('/api/regions')
       await this.setState({
-        regions: [...this.state.regions, newRegion.data],
+        regions: regions.data,
         temp: {}
       })
       $('#create-region-modal').modal('toggle')
-      $('#region-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -57,7 +97,7 @@ export default class Region extends Component {
     try {
       await axios.delete(`/api/regions/${regionId}`)
       await this.setState({
-        regions: filter(this.state.regions, o => {
+        regions: _.filter(this.state.regions, o => {
           return o._id != regionId
         })
       })
@@ -83,7 +123,7 @@ export default class Region extends Component {
             <td>{keywords}</td>
             <td>{region.description}</td>
             <td>
-              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleUpdate(e, region)}><i className="fa fa-edit"></i> Edit</button>
+              <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, region)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, region._id)}><i className="fa fa-trash"></i> Delete</button>
             </td>
           </tr>
@@ -115,7 +155,7 @@ export default class Region extends Component {
                   {items}
                 </tbody>
               </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" data-target="#create-region-modal">
+              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
                 Create new Region
               </button>
 
@@ -123,7 +163,7 @@ export default class Region extends Component {
                 <div className="modal-dialog">
                   <div className="modal-content">
                     <div className="modal-header">
-                      <h4 className="modal-title">Create new Region</h4>
+                      <h4 className="modal-title">{this.state.isEdit ? 'Edit Region' : 'Create new Region'}</h4>
                       <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span></button>
                     </div>
@@ -133,25 +173,25 @@ export default class Region extends Component {
                           <div className="form-group">
                             <label htmlFor="input-region-name" className="col-sm-2 control-label">Name</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-region-name" placeholder="Name" onBlur={(e) => this._handleBlur(e, 'name')} />
+                              <input type="text" className="form-control" id="input-region-name" placeholder="Name" value={this.state.temp.name || ''} onChange={(e) => this._handleChange(e, 'name')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-region-logo" className="col-sm-2 control-label">Logo</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-region-logo" placeholder="Logo" onBlur={(e) => this._handleBlur(e, 'logo')} />
+                              <input type="text" className="form-control" id="input-region-logo" placeholder="Logo" value={this.state.temp.logo || ''} onChange={(e) => this._handleChange(e, 'logo')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-region-keywords" className="col-sm-2 control-label">Keywords</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-region-keywords" placeholder="Keywords" onBlur={(e) => this._handleBlur(e, 'keywords')} />
+                              <input type="text" className="form-control" id="input-region-keywords" placeholder="Keywords" value={this.state.temp.keywords || ''} onChange={(e) => this._handleChange(e, 'keywords')} />
                             </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-region-description" className="col-sm-2 control-label">Description</label>
                             <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-region-description" placeholder="Description" onBlur={(e) => this._handleBlur(e, 'description')} />
+                              <input type="text" className="form-control" id="input-region-description" placeholder="Description" value={this.state.temp.description || ''} onChange={(e) => this._handleChange(e, 'description')} />
                             </div>
                           </div>
                         </div>
@@ -159,7 +199,11 @@ export default class Region extends Component {
                     </div>
                     <div className="modal-footer">
                       <button type="button" className="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                      <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save Region</button>
+                      {
+                        this.state.isEdit ?
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleUpdate(e)}>Update</button> :
+                          <button type="button" className="btn btn-primary" onClick={(e) => this._handleSave(e)}>Save</button>
+                      }
                     </div>
                   </div>
                 </div>
