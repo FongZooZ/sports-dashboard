@@ -9,6 +9,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 public/build
+public/logo/*.png
+public/logo/*.jpg
+public/logo/*.jpeg
 newrelic_agent.log
 atlassian-connect.json
 config.json

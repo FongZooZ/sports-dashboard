@@ -43,6 +43,30 @@ export default class Sport extends Component {
     })
   }
 
+  async _handleFileChange(e) {
+    const files = e.target.files
+    if (!files.length) return
+    const logo = files[0]
+    let data = new FormData()
+    data.append('file', logo, logo.fileName)
+
+    try {
+      const response = await axios.post('/api/image/upload', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      const logo = response.data
+      await this.setState({
+        temp: Object.assign(this.state.temp, {
+          logo: logo.url
+        })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   _handleCheckboxChange(e) {
     this.setState({
       temp: Object.assign(this.state.temp, {
@@ -104,7 +128,7 @@ export default class Sport extends Component {
           <tr key={sport._id}>
             <td></td>
             <td>{sport.name}</td>
-            <td>{sport.logo}</td>
+            <img src={sport.logo} />
             <td>{sport.description}</td>
             <td>{sport.isIndividual ? 'Yes' : 'No'}</td>
             <td>
@@ -180,10 +204,8 @@ export default class Sport extends Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-sport-logo" className="col-sm-2 control-label">Logo</label>
-                            <div className="col-sm-10">
-                              <input type="text" className="form-control" id="input-sport-logo" placeholder="Logo" value={this.state.temp.logo || ''} onChange={(e) => this._handleChange(e, 'logo')} />
-                            </div>
+                            <label htmlFor="input-sport-logo">Upload logo image</label>
+                            <input type="file" id="input-sport-logo" onChange={(e) => this._handleFileChange(e)} />
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-sport-description" className="col-sm-2 control-label">Description</label>
