@@ -152,7 +152,7 @@ export default class Region extends Component {
           <tr key={region._id}>
             <td></td>
             <td>{region.name}</td>
-            <img src={region.logo} />
+            <td><img src={region.logo} width="40" height="40" /></td>
             <td>{keywords}</td>
             <td>{region.description}</td>
             <td>
