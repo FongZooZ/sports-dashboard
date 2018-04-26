@@ -23,6 +23,7 @@
     "express": "^4.16.3",
     "express-validator": "^5.0.3",
     "font-awesome": "^4.7.0",
+    "formidable": "^1.2.1",
     "gentelella": "^1.4.0",
     "helmet": "^3.12.0",
     "jquery": "^3.3.1",
@@ -31,6 +32,7 @@
     "morgan": "^1.9.0",
     "pagination": "^0.4.4",
     "react": "^16.3.2",
+    "react-datepicker": "^1.4.1",
     "react-dom": "^16.3.2",
     "react-router-dom": "^4.2.2"
   },

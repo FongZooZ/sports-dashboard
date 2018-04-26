@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import DatePicker from 'react-datepicker'
 
 export default class match extends Component {
   constructor(props) {
@@ -20,8 +21,8 @@ export default class match extends Component {
       let [regions, sports] = await Promise.all(promises)
 
       this.setState({
-        regions: regions.data,
-        sports: sports.data,
+        regions: regions.data.data,
+        sports: sports.data.data,
         temp: {}
       })
     } catch (err) {
@@ -39,6 +40,14 @@ export default class match extends Component {
   }
 
   _handleChange(e, field) {
+    if (field == 'startAt') {
+      e = {
+        target: {
+          value: e
+        }
+      }
+    }
+
     this.setState({
       temp: Object.assign(this.state.temp, {
         [field]: e.target.value
@@ -249,11 +258,11 @@ export default class match extends Component {
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-start-at">Date:</label>
-                            <div id="input-match-start-at" className="input-group date">
+                            <div className="input-group date">
                               <div className="input-group-addon">
                                 <i className="fa fa-calendar"></i>
                               </div>
-                              <input type="text" className="form-control pull-right" value={this.state.temp.startAt || ''} onChange={(e) => this._handleChange(e, 'startAt')} />
+                              <DatePicker selected={this.state.temp.startAt} onChange={(date) => this._handleChange(date, 'startAt')} />
                             </div>
                           </div>
                         </div>

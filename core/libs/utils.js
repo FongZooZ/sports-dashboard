@@ -46,7 +46,7 @@ const walk = (modulesPath, excludeDir, callback) => {
 
 const assets = [
   {staticPath: '/vendors/bootstrap/dist', modulePath: '/node_modules/bootstrap/dist/'},
-  {staticPath: '/vendors/bootstrap-datepicker/dist', modulePath: '/node_modules/bootstrap-datepicker/dist/'},
+  {staticPath: '/vendors/react-datepicker/dist', modulePath: '/node_modules/react-datepicker/dist/'},
   {staticPath: '/vendors/font-awesome', modulePath: '/node_modules/font-awesome/'},
   {staticPath: '/vendors/admin-lte/dist', modulePath: '/node_modules/admin-lte/dist/'},
   {staticPath: '/vendors/jquery/dist', modulePath: '/node_modules/jquery/dist/'}
