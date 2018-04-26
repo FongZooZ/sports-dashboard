@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import DatePicker from 'react-datepicker'
+import moment from 'moment'
 
 export default class match extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ export default class match extends Component {
     let temp = {...match}
     temp.region = temp.region._id
     temp.sport = temp.sport._id
+    temp.startAt = moment(temp.startAt)
     await this.setState({ isEdit: true, temp })
     $('#create-match-modal').modal('toggle')
   }
@@ -147,7 +149,7 @@ export default class match extends Component {
             <td>{match.streamUrl}</td>
             <td>{match.region.name}</td>
             <td>{match.sport.name}</td>
-            <td>{match.startAt}</td>
+            <td>{moment(match.startAt).format('MMMM Do YYYY, h:mm a')}</td>
             <td>
               <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, match._id)}><i className="fa fa-trash"></i> Delete</button>
@@ -262,7 +264,7 @@ export default class match extends Component {
                               <div className="input-group-addon">
                                 <i className="fa fa-calendar"></i>
                               </div>
-                              <DatePicker selected={this.state.temp.startAt} onChange={(date) => this._handleChange(date, 'startAt')} />
+                              <DatePicker selected={this.state.temp.startAt} showTimeSelect onChange={(date) => this._handleChange(date, 'startAt')} />
                             </div>
                           </div>
                         </div>

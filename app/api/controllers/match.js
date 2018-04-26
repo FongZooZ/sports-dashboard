@@ -52,7 +52,7 @@ module.exports.save = async (req, res, next) => {
   req.check('region', 'region_empty').notEmpty()
   req.check('sport', 'sport_empty').notEmpty()
   // Temporary disable
-  // req.check('startAt', 'start_time_empty').notEmpty()
+  req.check('startAt', 'start_time_empty').notEmpty()
 
   const errors = req.validationErrors()
 
