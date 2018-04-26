@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Pagination from 'react-js-pagination'
+
+import { getParameterByName } from '../libs/common'
 
 export default class Sport extends Component {
   constructor(props) {
     super(props)
     this.state = {
       sports: [],
+      paginator: null,
+      limit: 10,
       temp: {},
       isEdit: false
     }
@@ -16,9 +21,15 @@ export default class Sport extends Component {
   }
 
   async _reload(page, limit) {
+    if (!page) page = getParameterByName('page')
+    if (!limit) limit = getParameterByName('limit')
     try {
-      let sports = await axios.get('/api/sports')
-      this.setState({sports: sports.data.data})
+      let sports = await axios.get(`/api/sports?page=${page}&limit=${limit}`)
+      this.setState({
+        sports: sports.data.data,
+        paginator: sports.data.paginator,
+        limit: sports.data.limit
+      })
     } catch (err) {
       console.error(err)
     }
@@ -137,7 +148,16 @@ export default class Sport extends Component {
                     </button>
                   </div>
                   <div className="col-md-7">
-                    {/* <Pagination reload={() => this._reload} paginator={this.state.paginator} tableId="sports-list" /> */}
+                    <div className="dataTables_paginate paging_simple_numbers pull-right">
+                      <Pagination
+                        itemClass="paginate_button"
+                        activePage={this.state.paginator ? this.state.paginator.current : 1}
+                        itemsCountPerPage={this.state.limit || 10}
+                        totalItemsCount={this.state.paginator ? this.state.paginator.totalResult : 0}
+                        pageRangeDisplayed={5}
+                        onChange={page => this._reload(page)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

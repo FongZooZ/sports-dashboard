@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Pagination from 'react-js-pagination'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+
+import { getParameterByName } from '../libs/common'
 
 export default class match extends Component {
   constructor(props) {
@@ -10,6 +13,8 @@ export default class match extends Component {
       matches: [],
       regions: [],
       sports: [],
+      paginator: null,
+      limit: 10,
       temp: {},
       isEdit: false
     }
@@ -31,10 +36,16 @@ export default class match extends Component {
     }
   }
 
-  async _reload() {
+  async _reload(page, limit) {
+    if (!page) page = getParameterByName('page')
+    if (!limit) limit = getParameterByName('limit')
     try {
-      let matches = await axios.get('/api/matches')
-      this.setState({matches: matches.data.data})
+      let matches = await axios.get(`/api/matches?page=${page}&limit=${limit}`)
+      this.setState({
+        matches: matches.data.data,
+        paginator: matches.data.paginator,
+        limit: matches.data.limit
+      })
     } catch (err) {
       console.error(err)
     }
@@ -205,9 +216,23 @@ export default class match extends Component {
                   {matches}
                 </tbody>
               </table>
-              <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
-                Create new Match
-              </button>
+              <div className="col-md-5">
+                <button type="button" className="btn btn-default" data-toggle="modal" onClick={(e) => this._handleOpenCreateModal(e)}>
+                  Create new Match
+                </button>
+              </div>
+              <div className="col-md-7">
+                <div className="dataTables_paginate paging_simple_numbers pull-right">
+                  <Pagination
+                    itemClass="paginate_button"
+                    activePage={this.state.paginator ? this.state.paginator.current : 1}
+                    itemsCountPerPage={this.state.limit || 10}
+                    totalItemsCount={this.state.paginator ? this.state.paginator.totalResult : 0}
+                    pageRangeDisplayed={5}
+                    onChange={page => this._reload(page)}
+                  />
+                </div>
+              </div>
 
               <div className="modal fade" id="create-match-modal" style={{display: 'none'}}>
                 <div className="modal-dialog">

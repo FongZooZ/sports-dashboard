@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Pagination from 'react-js-pagination'
+
+import { getParameterByName } from '../libs/common'
 
 export default class Region extends Component {
   constructor(props) {
     super(props)
     this.state = {
       regions: [],
+      paginator: null,
+      limit: 10,
       temp: {},
       isEdit: false
     }
@@ -15,10 +20,16 @@ export default class Region extends Component {
     this._reload()
   }
 
-  async _reload() {
+  async _reload(page, limit) {
+    if (!page) page = getParameterByName('page')
+    if (!limit) limit = getParameterByName('limit')
     try {
-      let regions = await axios.get('/api/regions')
-      this.setState({regions: regions.data.data})
+      let regions = await axios.get(`/api/regions?page=${page}&limit=${limit}`)
+      this.setState({
+        regions: regions.data.data,
+        paginator: regions.data.paginator,
+        limit: regions.data.limit
+      })
     } catch (err) {
       console.error(err)
     }
@@ -161,7 +172,16 @@ export default class Region extends Component {
                   </button>
                 </div>
                 <div className="col-md-7">
-                  {/* <Pagination reload={() => this._reload} paginator={this.state.paginator} tableId="regions-list" /> */}
+                  <div className="dataTables_paginate paging_simple_numbers pull-right">
+                    <Pagination
+                      itemClass="paginate_button"
+                      activePage={this.state.paginator ? this.state.paginator.current : 1}
+                      itemsCountPerPage={this.state.limit || 10}
+                      totalItemsCount={this.state.paginator ? this.state.paginator.totalResult : 0}
+                      pageRangeDisplayed={5}
+                      onChange={page => this._reload(page)}
+                    />
+                  </div>
                 </div>
               </div>
 
