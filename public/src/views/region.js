@@ -69,13 +69,15 @@ export default class Region extends Component {
   }
 
   async _handleOpenEditModal(e, region) {
-    await this.setState({ isEdit: true, temp: {...region} })
+    await this.setState({ isEdit: true, temp: {...region}, tempLogo: null })
     $('#create-region-modal').modal('toggle')
+    $('#region-form')[0].reset()
   }
 
   async _handleOpenCreateModal(e) {
-    await this.setState({ isEdit: false, temp: {} })
+    await this.setState({ isEdit: false, temp: {}, tempLogo: null })
     $('#create-region-modal').modal('toggle')
+    $('#region-form')[0].reset()
   }
 
   async _handleUpdate(e) {
@@ -95,10 +97,12 @@ export default class Region extends Component {
     try {
       await axios.put(`/api/regions/${this.state.temp._id}`, region)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo: null
       })
       this._reload()
       $('#create-region-modal').modal('toggle')
+      $('#region-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -121,10 +125,12 @@ export default class Region extends Component {
     try {
       await axios.post('/api/regions', newRegion)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo: null
       })
       this._reload()
       $('#create-region-modal').modal('toggle')
+      $('#region-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -228,8 +234,10 @@ export default class Region extends Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-region-logo">Upload logo image</label>
-                            <input type="file" id="input-region-logo" onChange={(e) => this._handleFileChange(e)} />
+                            <label htmlFor="input-region-logo" className="col-sm-2 control-label">Logo</label>
+                            <div className="col-sm-10">
+                              <input type="file" className="form-control" id="input-region-logo" onChange={(e) => this._handleFileChange(e)} />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-region-keywords" className="col-sm-2 control-label">Keywords</label>

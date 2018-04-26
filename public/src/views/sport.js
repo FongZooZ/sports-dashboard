@@ -76,23 +76,27 @@ export default class Sport extends Component {
   }
 
   async _handleOpenEditModal(e, sport) {
-    await this.setState({ isEdit: true, temp: {...sport} })
+    await this.setState({ isEdit: true, temp: {...sport}, tempLogo: null })
     $('#create-sport-modal').modal('toggle')
+    $('#sport-form')[0].reset()
   }
 
   async _handleOpenCreateModal(e) {
-    await this.setState({ isEdit: false, temp: {} })
+    await this.setState({ isEdit: false, temp: {}, tempLogo: null })
     $('#create-sport-modal').modal('toggle')
+    $('#sport-form')[0].reset()
   }
 
   async _handleUpdate(e) {
     try {
       await axios.put(`/api/sports/${this.state.temp._id}`, this.state.temp)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo: null
       })
       this._reload()
       $('#create-sport-modal').modal('toggle')
+      $('#sport-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -102,10 +106,12 @@ export default class Sport extends Component {
     try {
       await axios.post('/api/sports', this.state.temp)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo: null
       })
       this._reload()
       $('#create-sport-modal').modal('toggle')
+      $('#sport-form')[0].reset()
     } catch (err) {
       console.error(err)
     }
@@ -204,8 +210,10 @@ export default class Sport extends Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-sport-logo">Upload logo image</label>
-                            <input type="file" id="input-sport-logo" onChange={(e) => this._handleFileChange(e)} />
+                            <label htmlFor="input-sport-logo" className="col-sm-2 control-label">Logo</label>
+                            <div className="col-sm-10">
+                              <input type="file" className="form-control" id="input-sport-logo" onChange={(e) => this._handleFileChange(e)} />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-sport-description" className="col-sm-2 control-label">Description</label>
