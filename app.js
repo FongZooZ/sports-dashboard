@@ -20,7 +20,7 @@ const db = require('./core/db')
 const { registerStaticPath } = require('./core/libs/utils')
 
 const app = express()
-const port = 3000
+const port = process.env.NODE_ENV == 'production' ? 80 : 3000
 
 db.init()
 

@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "yarn run webpack-dev && NODE_ENV=development nodemon --inspect=0.0.0.0:9229 app.js",
-    "prod": "node app.js",
+    "prod": "yarn run webpack-prod && NODE_ENV=production node app.js",
     "webpack-dev": "node_modules/webpack/bin/webpack.js --mode development --config webpack.dev.js",
     "webpack-prod": "node_modules/webpack/bin/webpack.js --mode production --config webpack.prod.js"
   },
