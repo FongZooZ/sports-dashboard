@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="21px" viewBox="0 0 23 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>up</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="detail" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-chuadangnhap-Copy-10" transform="translate(-850.000000, -778.000000)" fill-rule="nonzero" fill="#FFFFFF">
+            <g id="Group-14" transform="translate(762.000000, 777.000000)">
+                <g id="Group-13" transform="translate(88.000000, 0.000000)">
+                    <g id="up" transform="translate(11.500000, 11.000000) scale(-1, -1) rotate(-90.000000) translate(-11.500000, -11.000000) translate(1.000000, 0.000000)">
+                        <path d="M13.5,21.996 C8.351,21.996 4,16.729 4,10.496 L4,8.496 C4,8.22 3.776,7.996 3.5,7.996 L0.613,7.996 L7.5,0.248 L14.387,7.996 L11.5,7.996 C11.242,7.996 11.026,8.192 11.002,8.448 C10.979,8.687 10.985,8.929 10.993,9.173 C10.997,9.28 11,9.388 11,9.496 C11,14.166 13.618,18.996 18,18.996 C18.869,18.996 19.825,18.7 20.713,18.266 C18.808,20.535 16.078,21.996 13.5,21.996 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

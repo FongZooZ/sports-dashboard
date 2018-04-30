@@ -4,9 +4,5 @@
     "public/*",
     "*.marko.js"
   ],
-  "watch": [
-    "*.js",
-    "*.marko"
-  ],
   "verbose": true
 }
