@@ -188,8 +188,8 @@ export default class match extends Component {
             <td><a href={match.streamUrl} target="blank">[Link]</a></td>
             <td>{match.region.name}</td>
             <td>{match.sport.name}</td>
-            <td><img src={`public/${match.logo1}`} height="40" /></td>
-            <td><img src={`public/${match.logo2}`} height="40" /></td>
+            <td>{match.logo1 ? <img src={`public/${match.logo1}`} height="40" /> : null}</td>
+            <td>{match.logo2 ? <img src={`public/${match.logo2}`} height="40" /> : null}</td>
             <td>{moment(match.startAt).format('hh:mm, DD/MM')}</td>
             <td>
               <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
