@@ -6,7 +6,6 @@ class Pagination extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div className="dataTables_paginate paging_simple_numbers">
         <ul className="pagination">

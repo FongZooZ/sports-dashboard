@@ -1,8 +1,10 @@
 const index = require('../controllers')
+const dashboard = require('../controllers/dashboard')
 const { loadRoutes } = require('../../../core/libs/utils')
-const dashboard = require('../views/dashboard.marko')
+const dashboardTemplate = require('../views/dashboard.marko')
+const auth = require('../../../core/middlewares/authorization')
 
-module.exports = (app, addon) => {
+module.exports = (app, passport) => {
   app.route('/')
     .get(index.home)
 
@@ -10,9 +12,12 @@ module.exports = (app, addon) => {
     .get(index.watch)
 
   app.route('/dashboard')
-    .get((req, res, next) => {
-      res.marko(dashboard)
+    .get(auth.requireLogin, (req, res, next) => {
+      res.marko(dashboardTemplate)
     })
 
-  loadRoutes(__dirname, app, addon)
+  app.route('/login')
+    .get(dashboard.login)
+
+  loadRoutes(__dirname, app, passport)
 }

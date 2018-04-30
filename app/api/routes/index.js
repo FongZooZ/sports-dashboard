@@ -1,7 +1,7 @@
 const { loadRoutes } = require('../../../core/libs/utils')
 const formidable = require('formidable')
 
-module.exports = (app, addon) => {
+module.exports = (app, passport) => {
   app.route('/api/image/upload')
     .post((req, res, next) => {
       const form = new formidable.IncomingForm()
@@ -22,5 +22,5 @@ module.exports = (app, addon) => {
       })
     })
 
-  loadRoutes(__dirname, app, addon)
+  loadRoutes(__dirname, app, passport)
 }

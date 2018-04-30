@@ -16,6 +16,7 @@ const markoExpress = require('marko/express')
 const morgan = require('morgan')
 const moment = require('moment')
 const session = require('express-session')
+const passport = require('passport')
 
 const config = require('./core/config')
 const db = require('./core/db')
@@ -31,6 +32,8 @@ app.disable('x-powered-by')
 app.locals.moment = moment
 
 app.use(session({ secret: 'sportsdashboard' }))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(morgan('combined'))
 app.use(helmet({ frameguard: false }))
 app.use(bodyParser.json({ limit: '50mb' }))
@@ -45,6 +48,8 @@ app.use(expressValidator({ errorFormatter: (param, msg, value) => {
   }
 }}))
 
+require('./core/config/passport').init(passport)
+
 const staticDir = path.join(__dirname, 'public')
 app.use('/public', express.static(staticDir))
 
@@ -53,8 +58,8 @@ registerStaticPath(app, express)
 //enable res.marko(template, data)
 app.use(markoExpress())
 
-require('./app/api/routes')(app)
-require('./app/dashboard/routes')(app)
+require('./app/api/routes')(app, passport)
+require('./app/dashboard/routes')(app, passport)
 
 // Show nicer errors when in dev mode
 if (process.env.NODE_ENV != 'production') app.use(errorHandler())
