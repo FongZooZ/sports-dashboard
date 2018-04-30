@@ -12,6 +12,9 @@ public/build
 public/logo/*.png
 public/logo/*.jpg
 public/logo/*.jpeg
+public/logo/match/*.png
+public/logo/match/*.jpg
+public/logo/match/*.jpeg
 newrelic_agent.log
 atlassian-connect.json
 config.json

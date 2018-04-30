@@ -16,6 +16,8 @@ export default class match extends Component {
       paginator: null,
       limit: 10,
       temp: {},
+      tempLogo1: null,
+      tempLogo2: null,
       isEdit: false
     }
   }
@@ -67,17 +69,41 @@ export default class match extends Component {
     })
   }
 
+  async _handleFileChange(e, field) {
+    const files = e.target.files
+    if (!files.length) return
+    const logo = files[0]
+    let data = new FormData()
+    data.append('file', logo, logo.fileName)
+
+    try {
+      const response = await axios.post('/api/image/upload?path=match', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      const logo = response.data
+      await this.setState({
+        temp: Object.assign(this.state.temp, {
+          [field]: logo.url
+        })
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   async _handleOpenEditModal(e, match) {
     let temp = {...match}
     temp.region = temp.region._id
     temp.sport = temp.sport._id
     temp.startAt = moment(temp.startAt)
-    await this.setState({ isEdit: true, temp })
+    await this.setState({ isEdit: true, temp, tempLogo1: null, tempLogo2: null })
     $('#create-match-modal').modal('toggle')
   }
 
   async _handleOpenCreateModal(e) {
-    await this.setState({ isEdit: false, temp: {} })
+    await this.setState({ isEdit: false, temp: {}, tempLogo1: null, tempLogo2: null })
     $('#create-match-modal').modal('toggle')
   }
 
@@ -98,7 +124,9 @@ export default class match extends Component {
     try {
       await axios.put(`/api/matches/${this.state.temp._id}`, match)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo1: null,
+        tempLogo2: null
       })
       this._reload()
       $('#create-match-modal').modal('toggle')
@@ -157,10 +185,12 @@ export default class match extends Component {
             <td>{match.name}</td>
             <td>{keywords}</td>
             <td>{match.description}</td>
-            <td>{match.streamUrl}</td>
+            <td><a href={match.streamUrl} target="blank">[Link]</a></td>
             <td>{match.region.name}</td>
             <td>{match.sport.name}</td>
-            <td>{moment(match.startAt).format('MMMM Do YYYY, h:mm a')}</td>
+            <td><img src={`public/${match.logo1}`} height="40" /></td>
+            <td><img src={`public/${match.logo2}`} height="40" /></td>
+            <td>{moment(match.startAt).format('hh:mm, DD/MM')}</td>
             <td>
               <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, match._id)}><i className="fa fa-trash"></i> Delete</button>
@@ -208,6 +238,8 @@ export default class match extends Component {
                     <th>Stream URL</th>
                     <th>Region</th>
                     <th>Sport</th>
+                    <th>Logo 1</th>
+                    <th>Logo 2</th>
                     <th>Start At</th>
                     <th>Action</th>
                   </tr>
@@ -282,6 +314,18 @@ export default class match extends Component {
                               <option>-- Select Sport --</option>
                               {sportItems}
                             </select>
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="input-match-logo1" className="col-sm-2 control-label">Logo 1</label>
+                            <div className="col-sm-10">
+                              <input type="file" className="form-control" id="input-match-logo1" onChange={(e) => this._handleFileChange(e, 'logo1')} />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label htmlFor="input-match-logo2" className="col-sm-2 control-label">Logo 2</label>
+                            <div className="col-sm-10">
+                              <input type="file" className="form-control" id="input-match-logo2" onChange={(e) => this._handleFileChange(e, 'logo2')} />
+                            </div>
                           </div>
                           <div className="form-group">
                             <label htmlFor="input-match-start-at">Date:</label>

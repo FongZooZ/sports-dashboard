@@ -18,6 +18,8 @@ const MatchSchema = new Schema({
   streamUrl: String,
   region: { type: Schema.ObjectId, ref: 'Region' },
   sport: { type: Schema.ObjectId, ref: 'Sport' },
+  logo1: String,
+  logo2: String,
   startAt: Date,
   status: { type: String, enum: _.values(statics.status), default: statics.status.active }
 })

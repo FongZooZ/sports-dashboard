@@ -134,7 +134,7 @@ export default class Sport extends Component {
           <tr key={sport._id}>
             <td></td>
             <td>{sport.name}</td>
-            <td><img src={`public/${sport.logo}`} width="40" height="40" /></td>
+            <td><img src={`public/${sport.logo}`} height="40" /></td>
             <td>{sport.description}</td>
             <td>{sport.isIndividual ? 'Yes' : 'No'}</td>
             <td>

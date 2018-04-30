@@ -51,8 +51,10 @@ module.exports.save = async (req, res, next) => {
   req.check('description', 'match_description_empty').notEmpty()
   req.check('region', 'region_empty').notEmpty()
   req.check('sport', 'sport_empty').notEmpty()
-  // Temporary disable
   req.check('startAt', 'start_time_empty').notEmpty()
+  req.check('streamUrl', 'stream_url_empty').notEmpty()
+  if (req.body.logo1) req.check('logo2', 'logo2_empty').notEmpty()
+  if (req.body.logo2) req.check('logo1', 'logo1_empty').notEmpty()
 
   const errors = req.validationErrors()
 
@@ -63,9 +65,9 @@ module.exports.save = async (req, res, next) => {
     keywords = req.body.keywords.map(keyword => keyword.trim())
   }
 
-  const { name, description, region, sport, startAt } = req.body
+  const { name, description, region, sport, startAt, logo1, logo2 } = req.body
 
-  let match = new Match({ name, description, region, sport, startAt, keywords })
+  let match = new Match({ name, description, region, sport, startAt, keywords, logo1, logo2 })
 
   try {
     await match.save()
