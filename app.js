@@ -15,6 +15,7 @@ const expressValidator = require('express-validator')
 const markoExpress = require('marko/express')
 const morgan = require('morgan')
 const moment = require('moment')
+const session = require('express-session')
 
 const config = require('./core/config')
 const db = require('./core/db')
@@ -29,6 +30,7 @@ app.set('port', port)
 app.disable('x-powered-by')
 app.locals.moment = moment
 
+app.use(session({ secret: 'sportsdashboard' }))
 app.use(morgan('combined'))
 app.use(helmet({ frameguard: false }))
 app.use(bodyParser.json({ limit: '50mb' }))
