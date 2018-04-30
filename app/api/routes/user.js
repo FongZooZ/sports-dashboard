@@ -4,5 +4,9 @@ module.exports = (app, passport) => {
   app.route('/api/users')
     .post(user.create)
 
-  app.post('/api/users/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }))
+  app.route('/api/users/login')
+    .post(passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }))
+
+  app.route('/api/users/logout')
+    .get(user.logout)
 }

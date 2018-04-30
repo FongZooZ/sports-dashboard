@@ -28,8 +28,6 @@ const create = async (req, res, next) => {
     password: req.body.password
   })
 
-  console.log(user)
-
   try {
     await user.save()
   } catch (err) {
@@ -41,6 +39,21 @@ const create = async (req, res, next) => {
   return res.json(user)
 }
 
+const logout = (req, res, next) => {
+  req.logout()
+
+  res.format({
+    json: function () {
+      res.status(200).json({
+        ok: true
+      })
+    },
+    html: () => res.redirect('/'),
+    text: () => res.redirect('/')
+  })
+}
+
 module.exports = {
-  create
+  create,
+  logout
 }
