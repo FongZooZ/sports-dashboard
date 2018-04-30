@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-chuadangnhap-Copy-7" transform="translate(-174.000000, -364.000000)">
+            <g id="Group-10" transform="translate(134.000000, 187.000000)">
+                <g id="Group" transform="translate(40.000000, 177.000000)">
+                    <circle id="Oval" fill="#FFFFFF" cx="25" cy="25" r="25"></circle>
+                    <path d="M32.5151081,25.8433927 L21.537204,32.8353391 L21.537204,32.8353391 C21.0713781,33.1320287 20.4532372,32.9949166 20.1565476,32.5290907 C20.0543089,32.3685679 20,32.1822032 20,31.9918868 L20,18.007994 L20,18.007994 C20,17.4557092 20.4477153,17.007994 21,17.007994 C21.1903165,17.007994 21.3766811,17.0623028 21.537204,17.1645416 L32.5151081,24.156488 L32.5151081,24.156488 C32.980934,24.4531775 33.1180461,25.0713184 32.8213565,25.5371443 C32.7428709,25.6603729 32.6383367,25.7649071 32.5151081,25.8433927 Z" id="Triangle" fill="#00BC39"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

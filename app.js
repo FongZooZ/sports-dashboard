@@ -14,6 +14,7 @@ const mongoose = require('mongoose')
 const expressValidator = require('express-validator')
 const markoExpress = require('marko/express')
 const morgan = require('morgan')
+const moment = require('moment')
 
 const config = require('./core/config')
 const db = require('./core/db')
@@ -24,8 +25,9 @@ const port = process.env.NODE_ENV == 'production' ? 80 : 3000
 
 db.init()
 
-app.set('port', port || 3000)
+app.set('port', port)
 app.disable('x-powered-by')
+app.locals.moment = moment
 
 app.use(morgan('combined'))
 app.use(helmet({ frameguard: false }))
@@ -42,7 +44,7 @@ app.use(expressValidator({ errorFormatter: (param, msg, value) => {
 }}))
 
 const staticDir = path.join(__dirname, 'public')
-app.use(express.static(staticDir))
+app.use('/public', express.static(staticDir))
 
 registerStaticPath(app, express)
 

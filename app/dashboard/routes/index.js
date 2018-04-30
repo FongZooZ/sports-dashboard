@@ -1,10 +1,14 @@
+const index = require('../controllers')
 const { loadRoutes } = require('../../../core/libs/utils')
-const layout = require('../views/layout.marko')
+const dashboard = require('../views/dashboard.marko')
 
 module.exports = (app, addon) => {
   app.route('/')
+    .get(index.home)
+
+  app.route('/dashboard')
     .get((req, res, next) => {
-      res.marko(layout)
+      res.marko(dashboard)
     })
 
   loadRoutes(__dirname, app, addon)
