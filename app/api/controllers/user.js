@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const User = mongoose.model('User')
 
-const create = async (req, res, next) => {
+const register = async (req, res, next) => {
   let count = 0
   try {
     count = await User.count()
@@ -36,7 +36,10 @@ const create = async (req, res, next) => {
 
   user = user.strip()
 
-  return res.json(user)
+  req.login(user, err => {
+    if (err) return next(err)
+    return res.redirect('/dashboard')
+  })
 }
 
 const logout = (req, res, next) => {
@@ -54,6 +57,6 @@ const logout = (req, res, next) => {
 }
 
 module.exports = {
-  create,
+  register,
   logout
 }

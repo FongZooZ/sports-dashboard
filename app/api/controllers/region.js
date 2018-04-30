@@ -5,7 +5,6 @@ const Region = mongoose.model('Region')
 
 module.exports.query = async (req, res, next) => {
   const sort = req.query.sort || '-createdAt'
-  console.log(req.query)
   let page = Number(req.query.page) || 1
   let limit = Number(req.query.limit) || 10
 

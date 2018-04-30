@@ -2,7 +2,7 @@ const user = require('../controllers/user')
 
 module.exports = (app, passport) => {
   app.route('/api/users')
-    .post(user.create)
+    .post(user.register)
 
   app.route('/api/users/login')
     .post(passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }))

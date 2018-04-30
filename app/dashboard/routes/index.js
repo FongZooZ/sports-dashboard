@@ -19,5 +19,8 @@ module.exports = (app, passport) => {
   app.route('/login')
     .get(dashboard.login)
 
+  app.route('/register')
+    .get(dashboard.register)
+
   loadRoutes(__dirname, app, passport)
 }

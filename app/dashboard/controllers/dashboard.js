@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const loginTemplate = require('../views/login.marko')
+const registerTemplate = require('../views/register.marko')
 
 const User = mongoose.model('User')
 
@@ -16,6 +17,11 @@ const login = async (req, res, next) => {
   res.marko(loginTemplate)
 }
 
+const register = (req, res, next) => {
+  res.marko(registerTemplate)
+}
+
 module.exports = {
-  login
+  login,
+  register
 }
