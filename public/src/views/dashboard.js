@@ -8,13 +8,32 @@ import Match from './match'
 const Dashboard = () => (
   <HashRouter>
     <div>
+      <header className="main-header">
+        <nav className="navbar navbar-static-top">
+          <a href="#" className="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span className="sr-only">Toggle navigation</span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+          </a>
+
+          <div className="navbar-custom-menu">
+            <ul className="nav navbar-nav">
+              <li>
+                <a href="/api/users/logout">Log Out <i className="fa fa-sign-out"></i></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
       <aside className="main-sidebar">
         <section className="sidebar">
           <ul className="sidebar-menu" data-widget="tree">
             <li className="header">Admin</li>
             <li>
               <Link to="/regions">
-                <i className="fa fa-link"></i>
+                <i className="fa fa-globe"></i>
                 <span>Regions</span>
               </Link>
             </li>
