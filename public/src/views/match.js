@@ -278,62 +278,65 @@ export default class match extends Component {
                       <form id="match-form" className="form-horizontal">
                         <div className="box-body">
                           <div className="form-group">
-                            <label htmlFor="input-match-name" className="col-sm-2 control-label">Name</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-name" className="col-sm-3 control-label">Name</label>
+                            <div className="col-sm-9">
                               <input type="text" className="form-control" id="input-match-name" placeholder="Name" value={this.state.temp.name || ''} onChange={(e) => this._handleChange(e, 'name')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-keywords" className="col-sm-2 control-label">Keywords</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-keywords" className="col-sm-3 control-label">Keywords</label>
+                            <div className="col-sm-9">
                               <input type="text" className="form-control" id="input-match-keywords" placeholder="Keywords" value={this.state.temp.keywords || ''} onChange={(e) => this._handleChange(e, 'keywords')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-description" className="col-sm-2 control-label">Description</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-description" className="col-sm-3 control-label">Description</label>
+                            <div className="col-sm-9">
                               <input type="text" className="form-control" id="input-match-description" placeholder="Description" value={this.state.temp.description || ''} onChange={(e) => this._handleChange(e, 'description')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-stream-url" className="col-sm-2 control-label">Stream URL</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-stream-url" className="col-sm-3 control-label">Stream URL</label>
+                            <div className="col-sm-9">
                               <input type="text" className="form-control" id="input-match-stream-url" placeholder="Stream URL" value={this.state.temp.streamUrl || ''} onChange={(e) => this._handleChange(e, 'streamUrl')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-region">Region Name</label>
-                            <select id="input-match-region" className="form-control" value={this.state.temp.region || ''} onChange={(e) => this._handleChange(e, 'region')}>
-                              <option>-- Select Region --</option>
-                              {regionItems}
-                            </select>
+                            <label htmlFor="input-match-region" className="col-sm-3 control-label">Region Name</label>
+                            <div className="col-sm-9">
+                              <select id="input-match-region" className="form-control" value={this.state.temp.region || ''} onChange={(e) => this._handleChange(e, 'region')}>
+                                <option>-- Select Region --</option>
+                                {regionItems}
+                              </select>
+                            </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-sport">Sport Name</label>
-                            <select id="input-match-sport" className="form-control" value={this.state.temp.sport || ''} onChange={(e) => this._handleChange(e, 'sport')}>
-                              <option>-- Select Sport --</option>
-                              {sportItems}
-                            </select>
+                            <label htmlFor="input-match-sport" className="col-sm-3 control-label">Sport Name</label>
+                            <div className="col-sm-9">
+                              <select id="input-match-sport" className="form-control" value={this.state.temp.sport || ''} onChange={(e) => this._handleChange(e, 'sport')}>
+                                <option>-- Select Sport --</option>
+                                {sportItems}
+                              </select>
+                            </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-logo1" className="col-sm-2 control-label">Logo 1</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-logo1" className="col-sm-3 control-label">Logo 1</label>
+                            <div className="col-sm-9">
                               <input type="file" className="form-control" id="input-match-logo1" onChange={(e) => this._handleFileChange(e, 'logo1')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-logo2" className="col-sm-2 control-label">Logo 2</label>
-                            <div className="col-sm-10">
+                            <label htmlFor="input-match-logo2" className="col-sm-3 control-label">Logo 2</label>
+                            <div className="col-sm-9">
                               <input type="file" className="form-control" id="input-match-logo2" onChange={(e) => this._handleFileChange(e, 'logo2')} />
                             </div>
                           </div>
                           <div className="form-group">
-                            <label htmlFor="input-match-start-at">Date:</label>
-                            <div className="input-group date">
-                              <div className="input-group-addon">
-                                <i className="fa fa-calendar"></i>
+                            <label htmlFor="input-match-start-at" className="col-sm-3 control-label">Date</label>
+                            <div className="col-sm-9">
+                              <div className="input-group col-sm-12">
+                                <DatePicker selected={this.state.temp.startAt} showTimeSelect onChange={(date) => this._handleChange(date, 'startAt')} />
                               </div>
-                              <DatePicker selected={this.state.temp.startAt} showTimeSelect onChange={(date) => this._handleChange(date, 'startAt')} />
                             </div>
                           </div>
                         </div>
