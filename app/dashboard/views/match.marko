@@ -8,6 +8,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Xoilac.tv" />
+  <script type="text/javascript" src="https://ajax.cloudflare.com/cdn-cgi/scripts/935cb224/cloudflare-static/rocket.min.js"></script>
   <script type="text/javascript">
     //<![CDATA[
     window.__cfRocketOptions = {
@@ -17,7 +18,6 @@
     };
     //]]>
   </script>
-  <script defer type="text/javascript" src="https://ajax.cloudflare.com/cdn-cgi/scripts/935cb224/cloudflare-static/rocket.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,100italic,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet'
     type='text/css'>
@@ -151,8 +151,7 @@
     </div>
   </main>
   <script data-rocketsrc="/public/assets/v1/19279e8f4cccaf6db4dd0ecf2df08ab51a045835.js" type="text/rocketscript"></script>
-  <script type="text/rocketscript" data-rocketoptimized="true">
-  alert()
+  <script type="text/rocketscript">
     jQuery(document).ready(function() {
       jwplayer.key="7MeMRClEneUmFoHRO3u3ypzAZXlVgNtBE2pKDw==";
       var reconnectTime = 0;
@@ -164,22 +163,11 @@
         height: '100%',
         primary: "html5"
       });
-      jwplayer("container").onError(function(){
-        reconnectTime++;
-        if(reconnectTime > 5) return;
-        jwplayer("container").load({file:"${input.match.streamUrl}"});
-        jwplayer("container").play();
-      });
-      jwplayer("container").onComplete (function(){
-        jwplayer("container").load({file:"${input.match.streamUrl}"});
-        jwplayer("container").play();
-      });
     });
   </script>
   <script type="text/rocketscript">
     var baseUrl = 'http://xoilac.tv/';
   </script>
-
 </body>
 
 </html>

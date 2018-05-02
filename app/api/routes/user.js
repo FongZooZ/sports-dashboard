@@ -1,4 +1,5 @@
 const user = require('../controllers/user')
+const auth = require('../../../core/middlewares/authorization')
 
 module.exports = (app, passport) => {
   app.route('/api/users')
@@ -8,5 +9,5 @@ module.exports = (app, passport) => {
     .post(passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }))
 
   app.route('/api/users/logout')
-    .get(user.logout)
+    .get(auth.requireLogin, user.logout)
 }

@@ -1,12 +1,13 @@
 const match = require('../controllers/match')
+const auth = require('../../../core/middlewares/authorization')
 
 module.exports = app => {
   app.route('/api/matches')
-    .get(match.query)
-    .post(match.save)
+    .get(auth.requireLogin, match.query)
+    .post(auth.requireLogin, match.save)
 
   app.route('/api/matches/:matchId([0-9a-fA-F]{24})')
-    .get(match.fetch)
-    .put(match.update)
-    .delete(match.delete)
+    .get(auth.requireLogin, match.fetch)
+    .put(auth.requireLogin, match.update)
+    .delete(auth.requireLogin, match.delete)
 }
