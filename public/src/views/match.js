@@ -3,6 +3,7 @@ import axios from 'axios'
 import Pagination from 'react-js-pagination'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+import _ from 'lodash'
 
 import { getParameterByName } from '../libs/common'
 
@@ -18,7 +19,8 @@ export default class match extends Component {
       temp: {},
       tempLogo1: null,
       tempLogo2: null,
-      isEdit: false
+      isEdit: false,
+      tempIsIndividual: true
     }
   }
 
@@ -60,6 +62,16 @@ export default class match extends Component {
           value: e
         }
       }
+    } else if (field == 'sport') {
+      const sportId = e.target.value
+      let tempIsIndividual
+      if (!sportId) {
+        tempIsIndividual = true
+      } else {
+        const sport = _.find(this.state.sports, {_id: sportId})
+        tempIsIndividual = !!sport.isIndividual
+      }
+      this.setState({tempIsIndividual})
     }
 
     this.setState({
@@ -98,12 +110,14 @@ export default class match extends Component {
     temp.region = temp.region._id
     temp.sport = temp.sport._id
     temp.startAt = moment(temp.startAt)
-    await this.setState({ isEdit: true, temp, tempLogo1: null, tempLogo2: null })
+    const sport = _.find(this.state.sports, {_id: temp.sport})
+    await this.setState({ isEdit: true, temp, tempLogo1: null, tempLogo2: null, tempIsIndividual: !!sport.isIndividual })
+    $('#match-form')[0].reset()
     $('#create-match-modal').modal('toggle')
   }
 
   async _handleOpenCreateModal(e) {
-    await this.setState({ isEdit: false, temp: {}, tempLogo1: null, tempLogo2: null })
+    await this.setState({ isEdit: false, temp: {}, tempLogo1: null, tempLogo2: null, tempIsIndividual: true })
     $('#create-match-modal').modal('toggle')
   }
 
@@ -126,7 +140,8 @@ export default class match extends Component {
       await this.setState({
         temp: {},
         tempLogo1: null,
-        tempLogo2: null
+        tempLogo2: null,
+        tempIsIndividual: true
       })
       this._reload()
       $('#create-match-modal').modal('toggle')
@@ -152,7 +167,9 @@ export default class match extends Component {
     try {
       await axios.post('/api/matches', newMatch)
       await this.setState({
-        temp: {}
+        temp: {},
+        tempLogo1: null,
+        tempLogo2: null
       })
       this._reload()
       $('#create-match-modal').modal('toggle')
@@ -188,8 +205,10 @@ export default class match extends Component {
             <td><a href={match.streamUrl} target="blank">[Link]</a></td>
             <td>{match.region.name}</td>
             <td>{match.sport.name}</td>
-            <td>{match.logo1 ? <img src={`public/${match.logo1}`} height="40" /> : null}</td>
-            <td>{match.logo2 ? <img src={`public/${match.logo2}`} height="40" /> : null}</td>
+            <td>{match.logo1 ? <img src={`public/${match.logo1}`} height="40" /> : '-'}</td>
+            <td>{match.team1Info || '-'}</td>
+            <td>{match.logo2 ? <img src={`public/${match.logo2}`} height="40" /> : '-'}</td>
+            <td>{match.team2Info || '-'}</td>
             <td>{moment(match.startAt).format('hh:mm, DD/MM')}</td>
             <td>
               <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
@@ -219,6 +238,36 @@ export default class match extends Component {
       })
     }
 
+    let logoForm
+    if (!this.state.tempIsIndividual) {
+      logoForm = [
+        <div key="input-match-logo1" className="form-group">
+          <label htmlFor="input-match-logo1" className="col-sm-3 control-label">Logo Team 1</label>
+          <div className="col-sm-9">
+            <input type="file" className="form-control" id="input-match-logo1" onChange={(e) => this._handleFileChange(e, 'logo1')} />
+          </div>
+        </div>,
+        <div key="input-match-team1-info" className="form-group">
+          <label htmlFor="input-match-team1Info" className="col-sm-3 control-label">Info Team 1</label>
+          <div className="col-sm-9">
+            <input type="text" className="form-control" id="input-match-team1Info" placeholder="Info Team 1" value={this.state.temp.team1Info || ''} onChange={(e) => this._handleChange(e, 'team1Info')} />
+          </div>
+        </div>,
+        <div key="input-match-logo2" className="form-group">
+          <label htmlFor="input-match-logo2" className="col-sm-3 control-label">Logo Team 2</label>
+          <div className="col-sm-9">
+            <input type="file" className="form-control" id="input-match-logo2" onChange={(e) => this._handleFileChange(e, 'logo2')} />
+          </div>
+        </div>,
+        <div key="input-match-team2-info" className="form-group">
+          <label htmlFor="input-match-team2Info" className="col-sm-3 control-label">Info Team 2</label>
+          <div className="col-sm-9">
+            <input type="text" className="form-control" id="input-match-team2Info" placeholder="Info Team 2" value={this.state.temp.team2Info || ''} onChange={(e) => this._handleChange(e, 'team2Info')} />
+          </div>
+        </div>
+      ]
+    }
+
     return (
       <div className="row">
         <div className="col-md-12">
@@ -238,8 +287,10 @@ export default class match extends Component {
                     <th>Stream URL</th>
                     <th>Region</th>
                     <th>Sport</th>
-                    <th>Logo 1</th>
-                    <th>Logo 2</th>
+                    <th>Team 1</th>
+                    <th>Team 1 Info</th>
+                    <th>Team 2</th>
+                    <th>Team 2 Info</th>
                     <th>Start At</th>
                     <th>Action</th>
                   </tr>
@@ -319,18 +370,7 @@ export default class match extends Component {
                               </select>
                             </div>
                           </div>
-                          <div className="form-group">
-                            <label htmlFor="input-match-logo1" className="col-sm-3 control-label">Logo 1</label>
-                            <div className="col-sm-9">
-                              <input type="file" className="form-control" id="input-match-logo1" onChange={(e) => this._handleFileChange(e, 'logo1')} />
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="input-match-logo2" className="col-sm-3 control-label">Logo 2</label>
-                            <div className="col-sm-9">
-                              <input type="file" className="form-control" id="input-match-logo2" onChange={(e) => this._handleFileChange(e, 'logo2')} />
-                            </div>
-                          </div>
+                          {logoForm}
                           <div className="form-group">
                             <label htmlFor="input-match-start-at" className="col-sm-3 control-label">Date</label>
                             <div className="col-sm-9">

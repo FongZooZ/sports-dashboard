@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const pagination = require('pagination')
+const _ = require('lodash')
 
 const Match = mongoose.model('Match')
+const Sport = mongoose.model('Sport')
 
 module.exports.query = async (req, res, next) => {
   const sort = req.query.sort || '-createdAt'
@@ -53,8 +55,21 @@ module.exports.save = async (req, res, next) => {
   req.check('sport', 'sport_empty').notEmpty()
   req.check('startAt', 'start_time_empty').notEmpty()
   req.check('streamUrl', 'stream_url_empty').notEmpty()
-  if (req.body.logo1) req.check('logo2', 'logo2_empty').notEmpty()
-  if (req.body.logo2) req.check('logo1', 'logo1_empty').notEmpty()
+
+  let sportInstance
+  if (req.body.sport) {
+    try {
+      sportInstance = await Sport.findOne({_id: req.body.sport})
+    } catch (err) {
+      return next(err)
+    }
+    if (sportInstance && !sportInstance.isIndividual) {
+      req.check('logo1', 'logo1_empty').notEmpty()
+      req.check('logo2', 'logo2_empty').notEmpty()
+      req.check('team1Info', 'team1_info_empty').notEmpty()
+      req.check('team2Info', 'team2_info_empty').notEmpty()
+    }
+  }
 
   const errors = req.validationErrors()
 
@@ -65,9 +80,11 @@ module.exports.save = async (req, res, next) => {
     keywords = req.body.keywords.map(keyword => keyword.trim())
   }
 
-  const { name, description, region, sport, startAt, logo1, logo2 } = req.body
+  let pickFields = ['name', 'description', 'region', 'sport', 'startAt']
+  if (!sportInstance.isIndividual) pickFields = pickFields.concat(['logo1', 'logo2', 'team1Info', 'team2Info'])
+  const matchData = _.pick(req.body, pickFields)
 
-  let match = new Match({ name, description, region, sport, startAt, keywords, logo1, logo2 })
+  let match = new Match({...matchData, keywords})
 
   try {
     await match.save()

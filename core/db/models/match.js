@@ -20,8 +20,11 @@ const MatchSchema = new Schema({
   sport: { type: Schema.ObjectId, ref: 'Sport' },
   logo1: String,
   logo2: String,
+  team1Info: String,
+  team2Info: String,
   startAt: Date,
-  status: { type: String, enum: _.values(statics.status), default: statics.status.active }
+  status: { type: String, enum: _.values(statics.status), default: statics.status.active },
+  isIndividual: Boolean
 })
 
 MatchSchema.statics = statics
