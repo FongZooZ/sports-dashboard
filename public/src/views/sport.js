@@ -225,7 +225,7 @@ export default class Sport extends Component {
                             <div className="col-sm-offset-2 col-sm-10">
                               <div className="checkbox">
                                 <label>
-                                  <input type="checkbox" value={this.state.temp.isIndividual || ''} onChange={(e) => this._handleCheckboxChange(e)} /> Is Individual
+                                  <input type="checkbox" defaultChecked={this.state.temp.isIndividual || ''} onChange={(e) => this._handleCheckboxChange(e)} /> Is Individual
                                 </label>
                               </div>
                             </div>
