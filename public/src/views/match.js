@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Pagination from 'react-js-pagination'
 import DatePicker from 'react-datepicker'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import _ from 'lodash'
 
 import '../styles/dashboard.css'
@@ -211,7 +211,7 @@ export default class match extends Component {
             <td>{match.team1Info || '-'}</td>
             <td>{match.logo2 ? <img src={`public/${match.logo2}`} height="40" /> : '-'}</td>
             <td>{match.team2Info || '-'}</td>
-            <td>{moment(match.startAt).format('hh:mm, DD/MM')}</td>
+            <td>{moment.tz(match.startAt).format('LLL')}</td>
             <td>
               <button type="button" className="btn btn-sm btn-primary" onClick={(e) => this._handleOpenEditModal(e, match)}><i className="fa fa-edit"></i> Edit</button>
               <button type="button" className="btn btn-sm btn-danger" onClick={(e) => this._handleDelete(e, match._id)}><i className="fa fa-trash"></i> Delete</button>
@@ -377,7 +377,7 @@ export default class match extends Component {
                             <label htmlFor="input-match-start-at" className="col-sm-3 control-label">Date</label>
                             <div className="col-sm-9">
                               <div className="input-group col-sm-12">
-                                <DatePicker selected={this.state.temp.startAt} showTimeSelect onChange={(date) => this._handleChange(date, 'startAt')} />
+                                <DatePicker selected={this.state.temp.startAt} onChange={(date) => this._handleChange(date, 'startAt')} showTimeSelect timeIntervals={5} utcOffset={0} dateFormat="LLL" timeFormat="HH:mm" />
                               </div>
                             </div>
                           </div>
