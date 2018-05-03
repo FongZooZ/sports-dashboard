@@ -5,6 +5,8 @@ import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import _ from 'lodash'
 
+import '../styles/dashboard.css'
+
 import { getParameterByName } from '../libs/common'
 
 export default class match extends Component {
